@@ -71,7 +71,7 @@ public class AddOrderPopupController extends PopupController<AddOrderPopupView, 
         order.setStatus(OrderStatus.UNPAID);
         order.setType(type);
         order.setDiscount(discount);
-        order.setCustomerId(1);
+        order.getCustomer().setCustomerId(1);
         orderDao.save(order);
         tableDao.update(table);
     }

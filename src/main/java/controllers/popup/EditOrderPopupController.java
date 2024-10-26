@@ -13,8 +13,11 @@ import dao.ShipmentDao;
 import dao.TableDao;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import models.Customer;
 import models.Employee;
@@ -190,7 +193,7 @@ public class EditOrderPopupController extends PopupController<EditOrderPopupView
         view.getOrderIdLabel().setText(order.getOrderId()+ "");
         try {
             for (Table table : tableDao.getAll()) { // Hiển thị danh sách bàn
-                if (table.getStatus() == TableStatus.FREE || table.getTableId()== order.getTableId()) {
+                if (table.getStatus() == TableStatus.FREE || table.getTableId()== order.getTable().getTableId()) {
                     view.getTbComboBoxModel().addElement(table);
                 }
             }
@@ -200,7 +203,11 @@ public class EditOrderPopupController extends PopupController<EditOrderPopupView
             orderItemController.setOrderItems(orderItemDao.getByOrderId(order.getOrderId()));
             foodItemController.renderCategory(foodItem -> {//Hiển thị danh sách món ăn
                 toppingPopupController.add(new ToppingPopupView(), foodItem, orderItem -> {
-                    orderItemController.addOrderItem(orderItem);// Thêm vào danh sách order
+                    try {
+                        orderItemController.addOrderItem(orderItem);// Thêm vào danh sách order
+                    } catch (SQLException ex) {
+                        ec.onError(ex);
+                    }
                     updateAmount(view, order);
                 });
             });
@@ -274,7 +281,7 @@ public class EditOrderPopupController extends PopupController<EditOrderPopupView
                 view.showError("Bạn chỉ có thể ship đơn online");
                 return;
             }
-            shipmentPopupControler.add(new ShipmentPopupView(), order.getOrderId(), () -> view.showMessage("Tạo / sửa đơn ship thành công!"), view::showError);
+            shipmentPopupControler.add(new ShipmentPopupView(), order, () -> view.showMessage("Tạo / sửa đơn ship thành công!"), view::showError);
         });
         view.getPrintOrderButton().addActionListener(evt -> {
             try {
