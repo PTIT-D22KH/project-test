@@ -87,11 +87,13 @@ public class OrderItem extends Model{
     public int getAmount() {
         return quantity * (foodPrice + toppingPrice);
     }
-  
+
     @Override
     public String toString() {
-        return "OrderItem{" + "order=" + order + ", foodItem=" + foodItem + ", topping=" + toppingItem + ", quantity=" + quantity + ", foodPrice=" + foodPrice + ", toppingPrice=" + toppingPrice + ", note=" + note + ", foodItem=" + foodItem + ", toppingItem=" + toppingItem + '}';
+        return "OrderItem{" + "quantity=" + quantity + ", foodPrice=" + foodPrice + ", toppingPrice=" + toppingPrice + ", note=" + note + ", foodItem=" + foodItem + ", toppingItem=" + toppingItem + ", order=" + order + '}';
     }
+  
+    
     public static OrderItem getFromResultSet(ResultSet rs) throws SQLException {
         OrderItem oi = new OrderItem();
 //        oi.setFoodItemId(rs.getInt("foodItemId"));

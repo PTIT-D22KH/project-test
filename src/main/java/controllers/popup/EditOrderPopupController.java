@@ -16,8 +16,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import models.Customer;
 import models.Employee;
@@ -128,7 +126,9 @@ public class EditOrderPopupController extends PopupController<EditOrderPopupView
             // Thanh toán
             order.setStatus(OrderStatus.PAID);
             order.setPayDate(new Timestamp(System.currentTimeMillis()));
+            System.out.println("Table " + order.getTable() + " of order" + order.getOrderId() + ", status: " + order.getTable().getStatus());
             order.getTable().setStatus(TableStatus.FREE); // Trả bàn
+            System.out.println("Table " + order.getTable() + " of order" + order.getOrderId() + ", status: " + order.getTable().getStatus());
         }
         order.setTotalAmount(orderItemController.getTotalAmount());
         orderDao.update(order);
